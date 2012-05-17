@@ -1,7 +1,7 @@
 """
 <name>Fasta File</name>
 <description>Reads data from a file then converts it to Fasta.</description>
-<icon>icons/TNGlogo.png</icon>
+<icon>icons/TOSlogo.png</icon>
 <contact>Janez Demsar (janez.demsar(@at@)fri.uni-lj.si)</contact>
 <priority>10</priority>
 """
