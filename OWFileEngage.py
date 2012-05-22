@@ -1,5 +1,5 @@
 """
-<name>Fasta File</name>
+<name>File Engage</name>
 <description>Reads data from a file then converts it to Fasta.</description>
 <icon>icons/TNGlogo.png</icon>
 <contact>Janez Demsar (janez.demsar(@at@)fri.uni-lj.si)</contact>
@@ -13,7 +13,10 @@ def call(f,*args,**keyargs):
 from OWWidget import *
 import OWGUI, string, os, sys, warnings
 import orngIO
-import re
+#=============Where your converter class goes============
+import converterClass
+converter = converterClass.fasta()
+#========================================================
 
 warnings.filterwarnings("error", ".*" , orange.KernelWarning, "OWFastaFile", 11)
 
@@ -89,6 +92,7 @@ def convertFastaTxt(fileLocation):
                  
 
 class OWFastaFile(OWWidget):
+    converter = converterClass.fasta()
     settingsList=["recentFiles", "createNewOn", "showAdvanced"]
     contextHandlers = {"": FileNameContextHandler()}
 # getRegesteredFileTypes 
@@ -287,11 +291,18 @@ class OWFastaFile(OWWidget):
         self.loadedFile = ""
 
         ###==================FASTA check=======================
-        if fastacheck(fn):
-            convertFastaTxt(fn)
-            fn=changeExt(fn, ".txt")
+        #if fastacheck(fn):
+            #convertFastaTxt(fn)
+            #fn=changeExt(fn, ".txt")
         ###====================================================
-        
+        ###=================streamlined conversion==============
+        try:
+            if self.converter.extCheck(fn): 
+                self.converter.main(fn)
+                fn = converter.changeExt(fn)
+        except NameError:
+            pass
+        ###====================================================
         if fn == "(none)":
             self.send("Data", None)
             self.infoa.setText("No data loaded")
