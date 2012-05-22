@@ -18,7 +18,7 @@ import converterClass
 converter = converterClass.fasta()
 #========================================================
 
-warnings.filterwarnings("error", ".*" , orange.KernelWarning, "OWFastaFile", 11)
+warnings.filterwarnings("error", ".*" , orange.KernelWarning, "OWFileEngage", 11)
 
 
 
@@ -35,63 +35,9 @@ def addOrigin(examples, filename):
         if "type" in var.attributes and "origin" not in var.attributes:
             var.attributes["origin"] = dirname
 
-def fastacheck(fn):
-    if ".fa" in fn:
-        return True
-    elif ".fasta" in fn:
-        return True
-    else:
-        return False
-
-def changeExt(fn, extension):
-    filepat=re.compile(r"(.+)\..+")
-    return filepat.search(fn).group(1)+extension
-
-            
-
-
-def convertFastaTxt(fileLocation):
-    def cleanup(b_array):##eliminates empty array that results from re.split
-        return b_array[1:]
-    
-    input_file=open("{}".format(fileLocation), 'r')
-    primary_input=input_file.read()##primary_input is now a string containing the original fasta data
-    headpattern= re.compile(">(.+)$", re.M)#pattern for isolating the header
-    whitespace = re.compile(r"( |\t|\r)")
-    #filepat=re.compile(r"(.+)\..+")##pattern for finding the file path no matter the extension
-    #input_filename=filepat.findall(fileLocation)[0]
-    
-    protoheaders = headpattern.findall(primary_input)
-    headers = []
-    for header in protoheaders:
-        header = whitespace.sub('_', header)
-        headers.append(header)
-        
-    bodies = re.split(">.*\\n", primary_input)##pattern for isolating bodies (sequences)
-    bodies = cleanup(bodies)
-    
-    clean_bodies1=[]
-    clean_bodies2=[]
-
-    ##below eliminate all whitespaces that may have found their way into the sequences
-    for i in bodies:
-        clean_bodies1.append(re.sub("\\n", "", i))##may be redundant
-    for i in clean_bodies1:
-        clean_bodies2.append(i.strip(" \t\n\r"))
-            
-    newstring="Description\tSequence Data\n\n"
-    
-    for i in range(len(clean_bodies2)):
-        newstring=newstring+headers[i]+"\t"+clean_bodies2[i]+"\n"##Format: head1<tab>body1<newline>...
-    #print newstring
-    
-    output=open(changeExt(fileLocation, ".txt"), 'w')
-    output.write(newstring)
-    #print "File converted, saved as {}.tab".format(input_filename)
-
                  
 
-class OWFastaFile(OWWidget):
+class OWFileEngage(OWWidget):
     converter = converterClass.fasta()
     settingsList=["recentFiles", "createNewOn", "showAdvanced"]
     contextHandlers = {"": FileNameContextHandler()}
@@ -109,7 +55,7 @@ class OWFastaFile(OWWidget):
      
                  
     def __init__(self, parent=None, signalManager = None):
-        OWWidget.__init__(self, parent, signalManager, "FastaFile", wantMainArea = 0, resizingEnabled = 1)
+        OWWidget.__init__(self, parent, signalManager, "FileEngage", wantMainArea = 0, resizingEnabled = 1)
 
         self.inputs = []
         self.outputs = [("Data", ExampleTable)]
@@ -253,7 +199,7 @@ class OWFastaFile(OWWidget):
                     startfile = os.path.join(d, "doc", "datasets")
 
             if not os.path.exists(startfile):
-                QMessageBox.information( None, "FastaFile", "Cannot find the directory with example data sets", QMessageBox.Ok + QMessageBox.Default)
+                QMessageBox.information( None, "FileEngage", "Cannot find the directory with example data sets", QMessageBox.Ok + QMessageBox.Default)
                 return
         else:
             if len(self.recentFiles) == 0 or self.recentFiles[0] == "(none)":
@@ -410,7 +356,7 @@ class OWFastaFile(OWWidget):
 
 if __name__ == "__main__":
     a = QApplication(sys.argv)
-    ow = OWFastaFile()
+    ow = OWFileEngage()
     ow.show()
     a.exec_()
     ow.saveSettings()
