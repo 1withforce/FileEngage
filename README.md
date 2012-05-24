@@ -5,5 +5,5 @@ V 1.0
 
 Orange file widget has built-in fasta converter.
 Icon needs to go in ~/.../orange/OrangeWidgets/Data/icons/
-classConverter needs to go in ~/.../orange/OrangeWidgets
+converterClass needs to go in ~/.../orange/OrangeWidgets
 OWFileEngage needs to go in ~/.../orange/OrangeWidgets/Data
